@@ -1,0 +1,99 @@
+Stop fire wall
+
+systemctl stop firewalld
+systemctl disable firewalld
+
+
+bash <(curl -s -L https://git.io/v2ray.sh)
+wget -N --no-check-certificate https://raw.githubusercontent.com/Alvin9999/v2ray-edit-from-233boy/master/install.sh && bash install.sh
+
+
+sudo passwd root
+
+sudo vi /etc/ssh/sshd_config
+
+找到PermitRootLogin 一行，改为PermitRootLogin yes，即允许root用户以任何认证方式登录
+找到PasswordAufentication 改 yes
+sudo service ssh restart
+
+
+装 b'b'r'p'lus
+wget -N --no-check-certificate "https://raw.githubusercontent.com/chiakge/Linux-NetSpeed/master/tcp.sh"
+
+chmod +x tcp.sh
+
+./tcp.sh
+
+Another install BBR
+
+wget -N --no-check-certificate "https://github.000060000.xyz/tcp.sh" && chmod +x tcp.sh && ./tcp.sh
+
+
+Youtube downloader
+sudo curl -L https://yt-dl.org/downloads/latest/youtube-dl -o /usr/local/bin/youtube-dl
+
+sudo chmod a+rx /usr/local/bin/youtube-dl
+apt-get install ffmpeg
+
+Install vless
+
+apt install -y git
+wget -N --no-check-certificate -q -O install.sh "https://raw.githubusercontent.com/wulabing/V2Ray_ws-tls_bash_onekey/dev/install.sh" && chmod +x install.sh && bash install.sh
+
+install speedtest
+
+wgethttps://raw.githubusercontent.com/sivel/speedtest-cli/master/speedtest.py
+chmod a+rx speedtest.py
+mv speedtest.py /usr/local/bin/speedtest-cli
+chown root:root /usr/local/bin/speedtest-cli
+speedtest-cli
+
+Another speedtest
+bash <(curl -Lso- https://git.io/superspeed)
+
+
+
+v2ray install method 2
+安装命令
+source <(curl -sL https://multi.netlify.app/v2ray.sh) --zh
+升级命令(保留配置文件更新)
+source <(curl -sL https://multi.netlify.app/v2ray.sh) -k
+
+卸载命令
+source <(curl -sL https://multi.netlify.app/v2ray.sh) --remove
+
+防火墙关闭
+
+systemctl stop firewalld
+systemctl disable firewalld
+
+Install GOST 
+wget --no-check-certificate -O gost.sh https://raw.githubusercontent.com/stsdust/EasyGost/master/gost.sh && chmod +x gost.sh && ./gost.sh
+
+method 2
+yum install screen （centos）
+screen -S gost
+wget -N --no-check-certificate https://github.com/ginuerzh/gost/releases/download/v2.11.1/gost-linux-amd64-2.11.1.gz && gzip -d gost-linux-amd64-2.11.1.gz
+mv gost-linux-amd64-2.11.1 gost
+chmod +x gost
+
+foreign country
+./gost -L=mtls://:443/127.0.0.1:20989 （20989 is the port of v2ray,567 is relay port)
+
+local relay station
+./gost -L=tcp://:443 -L=udp://:443 -F=forward+mtls://andyv2.tk:443?mbind=true
+
+搭建 ss+tls 的模式
+gost -L ss+mwss://chacha20(这里是加密方式):123456(这里是密码)@:443(这里是端口)
+./gost -L :1080(这里是你客户端本地运行的端口) -F ss+mwss://chacha20:www.mrhunger.net@server_ip(这里是你的服务端IP地址):443
+
+结束或删除端口，利用Linux系统的结束进程kill命令即可；
+
+yum install lsof  ##安装lsof命令
+lsof -i:8090  ##利用lsof命令查看端口占用的进程号，此处的8090为端口号
+kill -9 8888  ##此处的8888为进程PID号
+kill -9 $(ps aux | grep "gost" | sed '/grep/d' | awk '{print $2}')
+
+IBM install v2ray
+
+wget --no-check-certificate -O install.sh https://raw.githubusercontent.com/CCChieh/IBMYes/master/install.sh && chmod +x install.sh  && ./install.sh
