@@ -1,0 +1,68 @@
+global
+    ulimit-n 1048576
+    no log
+    # Distribute the health checks with a bit of randomness (value in percent of check interval)
+    spread-checks 20
+    # Limit the spread of checks, or services would take too long coming online (value in milliseconds)
+    max-spread-checks 5000
+    # progress number，CPU 有几个核心就修改成对应的数字
+    nbproc 2
+
+defaults
+    option dontlognull
+    option dontlog-normal
+    option srvtcpka
+    option clitcpka
+    option splice-auto # 启用对于套接字双向地自动内核加速。
+    option splice-request
+    option splice-response
+    maxconn 65535
+    timeout connect 1000ms # 对线路要求高，超过1000ms就认为服务不可用
+    timeout client  300s
+    timeout server  300s
+    timeout check   2s
+    retries 1            # 1次连接失败就认为服务器不可用，主要通过后面的check检查
+    option  redispatch   #当serverid对应的服务器挂掉后，强制定向到其他健康服务器
+    option  abortonclose #当服务器负载很高时，自动结束掉当前队列中处理比较久的链接
+    default-server check inter 3000 rise 8 fall 4 weight 255 slowstart 3h 
+
+resolvers mydns
+    nameserver dns1 127.0.0.1:53
+    nameserver dns2 8.8.8.8:53
+    nameserver dns3 1.1.1.1:53
+    resolve_retries      9999
+    timeout retry        1s
+    hold other           300s
+    hold refused         300s
+    hold nx              300s
+    hold timeout         300s
+    hold valid           100s
+
+listen haproxy_stats
+    bind 0.0.0.0:7070  #侦听IP:Port
+    mode http
+    stats enable
+    stats refresh 1m
+    stats uri /
+    stats realm Haproxy\ Statistics
+    stats admin if TRUE  #手工启用/禁用后端服务器
+
+frontend mps-in
+    bind :8001  # 本地服务端口
+    default_backend mps-out
+
+backend mps-out
+    mode tcp
+    option  tcp-check
+    option  forwardfor
+    balance roundrobin
+    # 以下是机场服务器节点设置
+    server test  test.vivian.com:443
+    server tjj   tjj.vivian.com:443
+    server tjjzzj  cu1.cloud.com:29713
+    server testzzj  cu1.cloud.com:29714
+
+
+#  启动docker
+
+#  docker run --name ha -v /opt/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg --restart always --net host -d haproxy 
