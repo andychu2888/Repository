@@ -10,10 +10,10 @@ echo "include/etc/nginx/tcpconf.d/*.conf;">>/etc/nginx.conf
 
 systemctl restart nginx
 
-定时任务
+定时任务（每隔6小时重启一次）
 crontab -e
 
-0*/6***systemctl restart nginx
+0 */6 * * * systemctl restart nginx
 
 
 stream{
@@ -29,5 +29,13 @@ stream{
     }
 }
 开放云ECS 出站端口 3306
+
+设置开机启动nginx
+
+systemctl enable nginx && systemctl start nginx
+
+查看Nginx运行状态
+
+ss -ntlp| grep -i nginx
 
 去网址 http://ip111.cn/  测试负载平衡成功否，如果成功，按F5 刷新此网址内容，会发现网页中显示tcpconf.d中的IP会有变化
