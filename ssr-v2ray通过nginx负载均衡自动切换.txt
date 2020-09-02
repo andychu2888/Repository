@@ -1,0 +1,31 @@
+yum  install nginx -y
+
+systemctl start nginx.service #（centos）
+
+service ngnix start #(Debian)
+
+mkdir -p /etc/nginx/tcpconf.d
+vi /etc/nginx/tcpconf.d/ssrproxy.conf
+echo "include/etc/nginx/tcpconf.d/*.conf;">>/etc/nginx.conf
+
+systemctl restart nginx
+
+定时任务
+crontab -e
+
+0*/6***systemctl restart nginx
+
+
+stream{
+    upstream hk{
+        server 34.92.89.95:1009;
+        server 34.68.107.207:1009;
+        server 35.221.165.234:1009;
+    }
+    server{
+        listen 3306;
+        listen 3306 udp;
+        proxy_pass hk;
+    }
+}
+开放云ECS 出站端口 3306
